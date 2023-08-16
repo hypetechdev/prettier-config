@@ -13,16 +13,16 @@ With PNPM:
 pnpm add @hypetech/prettier-config -D
 ```
 
+With Yarn:
+
+```bash
+yarn add -D @hypetech/prettier-config
+```
+
 With NPM:
 
 ```bash
 npm install --dev @hypetech/prettier-config
-```
-
-With Yarn:
-
-```bash
-yarn add --dev @hypetech/prettier-config
 ```
 
 To inform prettier of this configuration, you have to add the `prettier` property to your `package.json` file:
