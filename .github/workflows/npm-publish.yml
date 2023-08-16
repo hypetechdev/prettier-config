@@ -1,0 +1,41 @@
+name: Publish to NPM
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    publish-npm:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Get package version
+              id: package-version
+              uses: martinbeentjes/npm-get-version-action@v1.3.1
+            - name: Setup node environment
+              uses: actions/setup-node@v2
+              with:
+                  node-version: 18
+                  registry-url: https://registry.npmjs.org/
+            - run: npm ci
+            - name: Publish to NPM
+              run: npm publish
+              env:
+                  NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+            - name: Collect release notes
+              id: collect-release-notes
+              run: |
+                  echo "::group::Prepare release notes"
+                  RELEASE_NOTES=$(awk -v ver=${{ steps.package-version.outputs.current-version }} '/^## \[/ { if ($2 == "["ver"]") { p=1 } else { p=0 } } p { print }' CHANGELOG.md | tail -n +3)
+                  echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+                  echo "$RELEASE_NOTES" >> $GITHUB_ENV
+                  echo "EOF" >> $GITHUB_ENV
+                  echo "::endgroup::"
+            - name: Create Release Tag
+              id: create-release
+              uses: softprops/action-gh-release@v1
+              with:
+                  tag_name: ${{ steps.package-version.outputs.current-version }}
+                  body: ${{ env.RELEASE_NOTES }}
+                  token: ${{ secrets.GITHUB_TOKEN }}

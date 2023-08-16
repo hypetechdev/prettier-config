@@ -1,0 +1,23 @@
+{
+    "name": "@hypetech/prettier-config",
+    "version": "1.0.0",
+    "description": "HypeTech Prettier Configuration",
+    "keywords": [
+        "HypeTech",
+        "prettier"
+    ],
+    "homepage": "https://github.com/hypetechdev/prettier-config#readme",
+    "bugs": {
+        "url": "https://github.com/hypetechdev/prettier-config/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/hypetechdev/prettier-config.git"
+    },
+    "license": "MIT",
+    "author": "HypeTech",
+    "main": "main.json",
+    "peerDependencies": {
+        "prettier": ">=3"
+    }
+}
