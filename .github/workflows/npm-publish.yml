@@ -12,16 +12,18 @@ jobs:
             contents: write
             id-token: write
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - name: Get package version
               id: package-version
               uses: martinbeentjes/npm-get-version-action@v1.3.1
             - name: Setup node environment
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
               with:
-                  node-version: '18.x'
+                  node-version: 'lts/*'  # Always use latest LTS version
                   registry-url: https://registry.npmjs.org
-            - run: npm ci
+                  cache: 'npm'
+            - name: Install dependencies
+              run: npm ci
             - name: Publish to NPM
               run: npm publish --provenance --access public
               env:
@@ -37,7 +39,7 @@ jobs:
                   echo "::endgroup::"
             - name: Create Release Tag
               id: create-release
-              uses: softprops/action-gh-release@v1
+              uses: softprops/action-gh-release@v2
               with:
                   tag_name: ${{ steps.package-version.outputs.current-version }}
                   body: ${{ env.RELEASE_NOTES }}
